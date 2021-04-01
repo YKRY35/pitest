@@ -18,6 +18,10 @@ import org.pitest.util.ManifestUtils;
 
 public class WrappingProcess {
 
+
+  private static final boolean DEBUG_FLAG = true;
+  private static final boolean JPROFILER_ATTACH_FLAG = true;
+
   private final int         port;
   private final ProcessArgs processArgs;
   private final Class<?>    minionClass;
@@ -103,6 +107,14 @@ public class WrappingProcess {
     createClasspathJar(classPath, cmd);
 
     cmd.addAll(args);
+
+    if (DEBUG_FLAG) {
+      cmd.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7999");
+    }
+
+    if (JPROFILER_ATTACH_FLAG) {
+      cmd.add("-agentpath:E:\\JPROFI~1\\bin\\WINDOW~1\\jprofilerti.dll=port=8849");
+    }
 
     addPITJavaAgent(agentJarLocator, cmd);
     addLaunchJavaAgents(cmd);
